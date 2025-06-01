@@ -10,10 +10,14 @@ class SyncEventsUseCase(
 
         for ((integrationKey, events) in grouped) {
             val integration = integrations[integrationKey] ?: continue
-            val success = integration.send(events)
-            if (success) {
-                repository.deleteEvents(events.map { it.timestamp })
+            val successfullySentEvents  = mutableListOf<AnalyticsEvent>()
+            events.forEach { event ->
+                val success = integration.sendEvent(event)
+                if (success) {
+                    successfullySentEvents.add(event)
+                }
             }
+            repository.deleteEvents(successfullySentEvents.map { it.timestamp })
         }
     }
 }

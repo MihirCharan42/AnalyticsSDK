@@ -22,13 +22,7 @@ class AnalyticsSyncWorker(
     override suspend fun doWork(): Result {
         return try {
             val context = applicationContext
-            val db = AnalyticsDatabase.getInstance(context)
-            val repository = AnalyticsRepositoryImpl(db.eventDao())
-
-            // Replace with real integration implementations
-            val integrations = mapOf<String, AnalyticsIntegration>()
-            val syncUseCase = SyncEventsUseCase(repository, integrations)
-            syncUseCase()
+            AnalyticsManager.syncNow()
             Result.success()
         } catch (e: Exception) {
             Result.retry()
@@ -36,7 +30,7 @@ class AnalyticsSyncWorker(
     }
 
     companion object {
-        const val WORK_NAME = "AnalyticsSyncWork"
+        private const val WORK_NAME = "AnalyticsSyncWork"
 
         fun schedulePeriodic(context: Context, intervalHours: Long = 1) {
             val constraints = Constraints.Builder()

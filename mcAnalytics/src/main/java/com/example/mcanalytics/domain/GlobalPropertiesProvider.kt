@@ -13,7 +13,12 @@ class GlobalPropertiesProvider {
         keys.forEach { properties.remove(it) }
     }
 
-    fun mergeWithGlobal(eventData: Map<String, Any?>): Map<String, Any?> {
-        return properties.toMap() + eventData
+    fun unsetAll() {
+        properties.clear()
+    }
+
+    fun mergeWithGlobal(eventData: Map<String, Any?>?): Map<String, Any?>? {
+        return eventData?.let { properties.toMutableMap().apply { putAll(it) } }
+            ?: properties.toMap()
     }
 }

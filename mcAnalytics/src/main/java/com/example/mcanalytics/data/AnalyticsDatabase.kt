@@ -11,13 +11,14 @@ abstract class AnalyticsDatabase : RoomDatabase() {
 
     companion object {
         @Volatile private var INSTANCE: AnalyticsDatabase? = null
+        private const val DATABASE_NAME = "analytics_db"
 
         fun getInstance(context: Context): AnalyticsDatabase {
             return INSTANCE ?: synchronized(this) {
                 Room.databaseBuilder(
                     context.applicationContext,
                     AnalyticsDatabase::class.java,
-                    "analytics_db"
+                    DATABASE_NAME
                 ).build().also { INSTANCE = it }
             }
         }

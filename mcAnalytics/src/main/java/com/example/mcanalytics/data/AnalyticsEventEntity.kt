@@ -3,7 +3,7 @@ package com.example.mcanalytics.data
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.example.mcanalytics.domain.AnalyticsEvent
-import kotlinx.serialization.json.Json
+import com.google.gson.Gson
 
 @Entity(tableName = "analytics_events")
 data class AnalyticsEventEntity(
@@ -14,16 +14,16 @@ data class AnalyticsEventEntity(
     val timestamp: Long
 )
 
-fun AnalyticsEvent.toEntity(): AnalyticsEventEntity = AnalyticsEventEntity(
+fun AnalyticsEvent.toEntity(gson: Gson): AnalyticsEventEntity = AnalyticsEventEntity(
     eventName = eventName,
-    dataJson = Json.encodeToString(data),
+    dataJson = data?.let { gson.toJson(it) } ?: "{}",
     integration = integration,
     timestamp = timestamp
 )
 
-fun AnalyticsEventEntity.toDomain(): AnalyticsEvent = AnalyticsEvent(
+fun AnalyticsEventEntity.toDomain(gson: Gson): AnalyticsEvent = AnalyticsEvent(
     eventName = eventName,
-    data = Json.decodeFromString(dataJson),
+    data = gson.fromJson<Map<String, Any?>>(dataJson, Map::class.java),
     integration = integration,
     timestamp = timestamp
 )
