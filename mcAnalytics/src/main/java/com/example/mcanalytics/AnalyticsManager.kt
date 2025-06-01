@@ -1,8 +1,6 @@
 package com.example.mcanalytics
 
 import android.content.Context
-import androidx.work.OneTimeWorkRequestBuilder
-import androidx.work.WorkManager
 import com.example.mcanalytics.data.AnalyticsDatabase
 import com.example.mcanalytics.data.AnalyticsRepositoryImpl
 import com.example.mcanalytics.domain.GlobalPropertiesProvider
