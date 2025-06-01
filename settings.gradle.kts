@@ -21,3 +21,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "AnalyticsSDK"
 include(":app")
+include(":mcAnalytics")
